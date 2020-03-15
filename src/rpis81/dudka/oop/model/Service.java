@@ -1,6 +1,8 @@
 package rpis81.dudka.oop.model;
 
-public final class Service {
+import java.util.Objects;
+
+public final class Service implements Cloneable {
 
     public static final int COST_DEFAULT = 300;
     public static final String NAME_DEFAULT = "интернет 100мб\\сек";
@@ -32,19 +34,28 @@ public final class Service {
         return serviceType;
     }
 
-    public boolean equals(Object object) {
-        if (!(object instanceof Service)) return false;
-        Service service = (Service) object;
-        return this.name.equals(service.name) && this.cost == service.cost;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Service)) return false;
+        Service service = (Service) o;
+        return Double.compare(service.cost, cost) == 0 &&
+                Objects.equals(name, service.name) &&
+                serviceType == service.serviceType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, cost, serviceType);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Service{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", cost=").append(cost);
-        sb.append(", serviceType=").append(serviceType);
-        sb.append('}');
-        return sb.toString();
+            return String.format("name %s \\ cost %fр.", name, cost);
     }
 }

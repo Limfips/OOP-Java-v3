@@ -1,6 +1,7 @@
 package rpis81.dudka.oop.model;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class EntityTariff implements Tariff {
 
@@ -88,7 +89,7 @@ public class EntityTariff implements Tariff {
 
     @Override
     public Service remove(String serviceName) {
-        return removeNodeByIndex(getIndex(serviceName));
+        return removeNodeByIndex(indexOf(serviceName));
     }
 
     @Override
@@ -107,7 +108,7 @@ public class EntityTariff implements Tariff {
     }
 
     @Override
-    public Service[] sortedServicesByBalance() {
+    public Service[] sortedServicesByCost() {
         Service[] services = getServices();
         for (int i = size-1; i > 0; i--){
             for (int j = 0; j < i; j++){
@@ -131,7 +132,12 @@ public class EntityTariff implements Tariff {
     }
 
     @Override
-    public int getIndex(String serviceName) {
+    public boolean remove(Service service) {
+        return remove(service.getName()) != null;
+    }
+
+    @Override
+    public int indexOf(String serviceName) {
         Service[] services = getServices();
         for (int i = 0; i < size; i++) {
             if (services[i] != null) {
@@ -141,6 +147,18 @@ public class EntityTariff implements Tariff {
             }
         }
         return -1;
+    }
+
+    @Override
+    public int lastIndexOf(Service service) {
+        Service[] services = getServices();
+        int k = -1;
+        for (int i = 0; i < size; i++) {
+            if (services[i].equals(service)) {
+                k = i;
+            }
+        }
+        return k;
     }
 
     @Override
@@ -284,5 +302,35 @@ public class EntityTariff implements Tariff {
             this.next = next;
             this.value = value;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IndividualsTariff)) return false;
+        IndividualsTariff tariff = (IndividualsTariff) o;
+        return size == tariff.size() &&
+                Arrays.equals(getServices(), tariff.getServices());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(size);
+        result = 71 * result + Arrays.hashCode(getServices());
+        return result;
+    }
+
+    @Override
+    public Tariff clone() throws CloneNotSupportedException {
+        return (Tariff) super.clone();
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("services:\n");
+        for (Service it : getServices()) {
+            sb.append(it).append('\n');
+        }
+        return sb.toString();
     }
 }

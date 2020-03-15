@@ -1,8 +1,9 @@
 package rpis81.dudka.oop.model;
 
 import java.util.Arrays;
+import java.util.Objects;
 
-public class IndividualsTariff implements Tariff {
+public class IndividualsTariff implements Tariff, Cloneable {
 
     public static final int SIZE_DEFAULT = 16;
 
@@ -129,7 +130,7 @@ public class IndividualsTariff implements Tariff {
         return newService;
     }
 
-    public Service[] sortedServicesByBalance() {
+    public Service[] sortedServicesByCost() {
         Service[] services = getServices();
         for (int i = size-1; i > 0; i--){
             for (int j = 0; j < i; j++){
@@ -151,13 +152,29 @@ public class IndividualsTariff implements Tariff {
         return cost;
     }
 
-    public int getIndex(String serviceName) {
+    @Override
+    public boolean remove(Service service) {
+        return remove(service.getName()) != null;
+    }
+
+    public int indexOf(String serviceName) {
         for (int i = 0; i < size; i++) {
             if (this.services[i].getName().equals(serviceName)) {
                 return i;
             }
         }
         return -1;
+    }
+
+    @Override
+    public int lastIndexOf(Service service) {
+        int k = -1;
+        for (int i = 0; i < size; i++) {
+            if (this.services[i].equals(service)) {
+                k = i;
+            }
+        }
+        return k;
     }
 
     @Override
@@ -198,11 +215,32 @@ public class IndividualsTariff implements Tariff {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof IndividualsTariff)) return false;
+        IndividualsTariff tariff = (IndividualsTariff) o;
+        return size == tariff.size &&
+                Arrays.equals(services, tariff.services);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(size);
+        result = 31 * result + Arrays.hashCode(services);
+        return result;
+    }
+
+    @Override
+    public Tariff clone() throws CloneNotSupportedException {
+        return (Tariff) super.clone();
+    }
+
+    @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("IndividualsTariff{");
-        sb.append("services=").append(Arrays.toString(services));
-        sb.append(", size=").append(size);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("services:\n");
+        for (Service it : getServices()) {
+            sb.append(it).append('\n');
+        }
         return sb.toString();
     }
 }

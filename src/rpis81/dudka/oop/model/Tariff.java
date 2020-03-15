@@ -11,8 +11,10 @@ public interface Tariff {
     Service remove(String serviceName);
     int size();
     Service[] getServices();
-    Service[] sortedServicesByBalance();
-    double cost();
-    int getIndex(String serviceName);
     Service[] getServices(ServiceTypes type);
+    Service[] sortedServicesByCost();
+    double cost();
+    boolean remove(Service service);
+    int indexOf(String serviceName);
+    int lastIndexOf(Service service);
 }

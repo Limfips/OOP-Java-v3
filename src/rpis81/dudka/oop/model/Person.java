@@ -28,18 +28,21 @@ public class Person {
         this.sName = sName;
     }
 
-    public boolean equals(Object object) {
-        if (!(object instanceof Person)) return false;
-        Person person = (Person) object;
-        return this.fName.equals(person.fName) && this.sName.equals(person.sName);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return Objects.equals(fName, person.fName) &&
+                Objects.equals(sName, person.sName);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(fName, sName);
+    }
 
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Person{");
-        sb.append("fName='").append(fName).append('\'');
-        sb.append(", sName='").append(sName).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return String.format("%s %s", fName, sName);
     }
 }

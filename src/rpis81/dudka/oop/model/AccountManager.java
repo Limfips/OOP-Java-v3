@@ -1,6 +1,8 @@
 package rpis81.dudka.oop.model;
 
 
+import java.util.Arrays;
+
 public class AccountManager {
 
     private Account[] accounts;
@@ -167,5 +169,14 @@ public class AccountManager {
         int length = this.accounts.length - 1;
         if (length - index >= 0) System.arraycopy(this.accounts, index + 1, this.accounts, index, length - index);
         this.accounts[length] = null;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        for (Account it : getAccounts()) {
+            sb.append(it.toString()).append('\n');
+        }
+        return sb.toString();
     }
 }
