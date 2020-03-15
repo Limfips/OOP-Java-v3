@@ -2,7 +2,7 @@ package rpis81.dudka.oop.model;
 
 import java.util.Arrays;
 
-public class IndividualsTariff {
+public class IndividualsTariff implements Tariff {
 
     public static final int SIZE_DEFAULT = 16;
 

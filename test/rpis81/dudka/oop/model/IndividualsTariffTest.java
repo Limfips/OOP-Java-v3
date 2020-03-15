@@ -14,7 +14,7 @@ public class IndividualsTariffTest {
     @Before
     public void init() {
         source = new DataSource();
-        individualsTariff = (IndividualsTariff) source.testIndividualsTariffs[0];
+        individualsTariff = (IndividualsTariff) source.testTariffs[0];
     }
 
     @Test
@@ -61,13 +61,13 @@ public class IndividualsTariffTest {
 
     @Test
     public void size() {
-        assertEquals(source.testIndividualsTariffs[0].size(), individualsTariff.size());
+        assertEquals(source.testTariffs[0].size(), individualsTariff.size());
     }
 
     @Test
     public void cost() {
         double cost = 0;
-        for (Service it : source.testIndividualsTariffs[0].getServices()) {
+        for (Service it : source.testTariffs[0].getServices()) {
             cost += it.getCost();
         }
         assertEquals(cost, individualsTariff.cost(), 0.0);

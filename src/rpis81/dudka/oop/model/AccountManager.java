@@ -1,6 +1,5 @@
 package rpis81.dudka.oop.model;
 
-import java.util.Arrays;
 
 public class AccountManager {
 
@@ -92,7 +91,7 @@ public class AccountManager {
         return newAccount;
     }
 
-    public IndividualsTariff getTariff(long accountNumber) {
+    public Tariff getTariff(long accountNumber) {
         for (int i = 0; i < size; i++) {
 
             if (this.accounts[i].getNumber() == accountNumber) {
@@ -102,10 +101,10 @@ public class AccountManager {
         return null;
     }
 
-    public IndividualsTariff setTariff(long accountNumber, IndividualsTariff tariff) {
+    public Tariff setTariff(long accountNumber, Tariff tariff) {
         for (int i = 0; i < size; i++) {
             if (this.accounts[i].getNumber() == accountNumber) {
-                IndividualsTariff oldTariff = this.accounts[i].getTariff();
+                Tariff oldTariff = this.accounts[i].getTariff();
                 this.accounts[i].setTariff(tariff);
                 return oldTariff;
             }
@@ -129,14 +128,5 @@ public class AccountManager {
         int length = this.accounts.length - 1;
         if (length - index >= 0) System.arraycopy(this.accounts, index + 1, this.accounts, index, length - index);
         this.accounts[length] = null;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("AccountManager{");
-        sb.append("accounts=").append(Arrays.toString(accounts));
-        sb.append(", size=").append(size);
-        sb.append('}');
-        return sb.toString();
     }
 }

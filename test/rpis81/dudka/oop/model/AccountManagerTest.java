@@ -14,41 +14,40 @@ public class AccountManagerTest {
     @Before
     public void init() {
         source = new DataSource();
-        accountManager = new AccountManager(new Account[]{source.accounts[0],
-                source.accounts[1], source.accounts[2]});
+        accountManager = new AccountManager(source.testAccounts);
     }
 
     @Test
     public void add() {
-        assertTrue(accountManager.add(source.accounts[3]));
+        assertTrue(accountManager.add(source.testIndividualAccounts[7]));
     }
 
     @Test
     public void add1() {
-        assertTrue(accountManager.add(0, source.accounts[3]));
-        assertEquals(accountManager.get(0), source.accounts[3]);
-        assertEquals(accountManager.get(1), source.accounts[0]);
-        assertEquals(accountManager.get(2), source.accounts[1]);
+        assertTrue(accountManager.add(0, source.testIndividualAccounts[7]));
+        assertEquals(accountManager.get(0), source.testIndividualAccounts[7]);
+        assertEquals(accountManager.get(1), source.testIndividualAccounts[0]);
+        assertEquals(accountManager.get(2), source.testEntityAccounts[0]);
     }
 
     @Test
     public void set() {
-        assertEquals(accountManager.set(0, source.accounts[3]), source.accounts[0]);
-        assertEquals(accountManager.get(0), source.accounts[3]);
-        assertEquals(accountManager.get(1), source.accounts[1]);
-        assertEquals(accountManager.get(2), source.accounts[2]);
+        assertEquals(accountManager.set(0, source.testEntityAccounts[7]), source.testIndividualAccounts[0]);
+        assertEquals(accountManager.get(0), source.testEntityAccounts[7]);
+        assertEquals(accountManager.get(1), source.testEntityAccounts[0]);
+        assertEquals(accountManager.get(2), source.testIndividualAccounts[1]);
     }
 
     @Test
     public void remove() {
-        assertEquals(accountManager.remove(0), source.accounts[0]);
-        assertEquals(accountManager.get(0), source.accounts[1]);
-        assertEquals(accountManager.get(1), source.accounts[2]);
+        assertEquals(accountManager.remove(0), source.testIndividualAccounts[0]);
+        assertEquals(accountManager.get(0), source.testEntityAccounts[0]);
+        assertEquals(accountManager.get(1), source.testIndividualAccounts[1]);
     }
 
     @Test
     public void size() {
-        assertEquals(3, accountManager.size());
+        assertEquals(10, accountManager.size());
     }
 
     @Test
@@ -60,14 +59,14 @@ public class AccountManagerTest {
 
     @Test
     public void getTariff() {
-        assertEquals(accountManager.getTariff(source.accounts[2].getNumber()),
-                source.accounts[2].getTariff());
+        assertEquals(accountManager.getTariff(source.testIndividualAccounts[2].getNumber()),
+                source.testIndividualAccounts[2].getTariff());
     }
 
     @Test
     public void setTariff() {
-        IndividualsTariff constTariff = source.accounts[1].getTariff();
-        assertEquals(accountManager.setTariff(source.accounts[1].getNumber(), source.accounts[9].getTariff()),
+        Tariff constTariff = source.testIndividualAccounts[1].getTariff();
+        assertEquals(accountManager.setTariff(source.testIndividualAccounts[1].getNumber(), source.testIndividualAccounts[9].getTariff()),
                 constTariff);
     }
 }
