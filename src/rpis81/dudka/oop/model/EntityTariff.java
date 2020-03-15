@@ -2,6 +2,7 @@ package rpis81.dudka.oop.model;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -66,23 +67,6 @@ public class EntityTariff implements Tariff {
     }
 
     @Override
-    public Service get(String serviceName) {
-        if (serviceName == null) throw new NullPointerException();
-        for (Node node = this.head; node != null; node = node.next) {
-            if (node.value.getName().equals(serviceName)) {
-                return node.value;
-            }
-        }
-        throw new NoSuchElementException();
-    }
-
-    @Override
-    public boolean hasService(String serviceName) {
-        if (serviceName == null) throw new NullPointerException();
-        return get(serviceName) != null;
-    }
-
-    @Override
     public Service set(int index, Service service) {
         if (service == null) throw new NullPointerException();
         if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
@@ -117,80 +101,9 @@ public class EntityTariff implements Tariff {
     }
 
     @Override
-    public Service[] sortedServicesByCost() {
-        Service[] services = getServices();
-        for (int i = size-1; i > 0; i--){
-            for (int j = 0; j < i; j++){
-                if( services[j].getCost() > services[j+1].getCost() ){
-                    Service tmp = services[j];
-                    services[j] = services[j+1];
-                    services[j+1] = tmp;
-                }
-            }
-        }
-        return services;
-    }
-
-    @Override
-    public double cost() {
-        double cost = 0;
-        long days;
-        for (Service service : getServices()) {
-            cost += service.getCost();
-            days = DAYS.between(service.getActivationDate(), LocalDate.now());
-            if (days < 30) {
-                cost += (days * cost) / 30;
-            }
-        }
-        return cost;
-    }
-
-    @Override
     public boolean remove(Service service) {
         if (service == null) throw new NullPointerException();
         return remove(service.getName()) != null;
-    }
-
-    @Override
-    public int indexOf(String serviceName) {
-        if (serviceName == null) throw new NullPointerException();
-        Service[] services = getServices();
-        for (int i = 0; i < size; i++) {
-            if (services[i] != null) {
-                if (services[i].getName().equals(serviceName)) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
-    @Override
-    public int lastIndexOf(Service service) {
-        if (service == null) throw new NullPointerException();
-        Service[] services = getServices();
-        int k = -1;
-        for (int i = 0; i < size; i++) {
-            if (services[i].equals(service)) {
-                k = i;
-            }
-        }
-        return k;
-    }
-
-    @Override
-    public Service[] getServices(ServiceTypes type) {
-        if (type == null) throw new NullPointerException();
-        Service[] services = new Service[size];
-        int newSize = 0;
-        for (Service it : getServices()) {
-            if (it.getServiceType().equals(type)) {
-                services[newSize++] = it;
-            }
-        }
-        Service[] result = new Service[newSize];
-        System.arraycopy(services, 0, result, 0, newSize);
-        return result;
     }
 
     // По Заданию
@@ -331,9 +244,32 @@ public class EntityTariff implements Tariff {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("services:\n");
-        for (Service it : getServices()) {
+        for (Service it : this) {
             sb.append(it).append('\n');
         }
         return sb.toString();
+    }
+
+    @Override
+    public Iterator<Service> iterator() {
+        return new ServiceIterator();
+    }
+
+    private class ServiceIterator implements Iterator<Service> {
+
+        private Node cursor = head;
+
+        @Override
+        public boolean hasNext() {
+            return cursor != null;
+        }
+
+        @Override
+        public Service next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Service value = cursor.value;
+            cursor = cursor.next;
+            return value;
+        }
     }
 }

@@ -2,9 +2,10 @@ package rpis81.dudka.oop.model;
 
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class AccountManager {
+public class AccountManager implements Iterable<Account> {
 
     private Account[] accounts;
     private int size;
@@ -106,7 +107,7 @@ public class AccountManager {
 
     public Account getAccount(long accountNumber) {
         if (!AbstractAccount.isValidNumber(accountNumber)) throw new IllegalAccountNumber();
-        for (Account it : getAccounts()) {
+        for (Account it : this) {
             if (it.getNumber() == accountNumber) {
                 return it;
             }
@@ -124,7 +125,7 @@ public class AccountManager {
         if (type == null) throw new NullPointerException();
         Account[] accounts = new Account[size];
         int i = 0;
-        for (Account it : getAccounts()) {
+        for (Account it : this) {
             if (it.getTariff().getServices(type).length > 0) {
                 accounts[i++] = it;
             }
@@ -137,7 +138,7 @@ public class AccountManager {
     public Account[] getIndividualAccounts() {
         Account[] accounts = new Account[size];
         int i = 0;
-        for (Account it : getAccounts()) {
+        for (Account it : this) {
             if (it instanceof IndividualAccount) {
                 accounts[i++] = it;
             }
@@ -150,7 +151,7 @@ public class AccountManager {
     public Account[] getEntityAccounts() {
         Account[] accounts = new Account[size];
         int i = 0;
-        for (Account it : getAccounts()) {
+        for (Account it : this) {
             if (it instanceof EntityAccount) {
                 accounts[i++] = it;
             }
@@ -173,7 +174,7 @@ public class AccountManager {
 
     public Tariff setTariff(long accountNumber, Tariff tariff) {
         if (!AbstractAccount.isValidNumber(accountNumber)) throw new IllegalAccountNumber();
-        if (tariff == null) throw new NullPointerException();
+        if (tariff   == null) throw new NullPointerException();
         for (int i = 0; i < size; i++) {
             if (this.accounts[i].getNumber() == accountNumber) {
                 Tariff oldTariff = this.accounts[i].getTariff();
@@ -205,9 +206,30 @@ public class AccountManager {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        for (Account it : getAccounts()) {
+        for (Account it : this) {
             sb.append(it.toString()).append('\n');
         }
         return sb.toString();
+    }
+
+    @Override
+    public Iterator<Account> iterator() {
+        return new AccountIterator();
+    }
+
+    private class AccountIterator implements Iterator<Account> {
+
+        private int count = 0;
+
+        @Override
+        public boolean hasNext() {
+            return count != size;
+        }
+
+        @Override
+        public Account next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            return get(count++);
+        }
     }
 }

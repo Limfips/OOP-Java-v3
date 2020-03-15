@@ -82,4 +82,12 @@ public class EntityTariffTest {
     public void getServices1() {
         assertEquals(1, entity.getServices(ServiceTypes.INTERNET).length);
     }
+
+    @Test
+    public void iteratorBLAD() {
+        int k = 0;
+        for (Service it : entity) {
+            assertEquals(it, source.entityTariffs[0].get(k++));
+        }
+    }
 }

@@ -3,7 +3,7 @@ package rpis81.dudka.oop.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public final class Service implements Cloneable {
+public final class Service implements Cloneable, Comparable<Service> {
 
     public static final int COST_DEFAULT = 300;
     public static final String NAME_DEFAULT = "интернет 100мб\\сек";
@@ -68,5 +68,10 @@ public final class Service implements Cloneable {
     @Override
     public String toString() {
             return String.format("name %s \\ cost %fр.", name, cost);
+    }
+
+    @Override
+    public int compareTo(Service o) {
+        return ((int) (this.cost - o.getCost()));
     }
 }

@@ -79,4 +79,12 @@ public class IndividualsTariffTest {
     public void getServices1() {
         assertEquals(1, individualsTariff.getServices(ServiceTypes.INTERNET).length);
     }
+
+    @Test
+    public void iteratorBLAD() {
+        int k = 0;
+        for (Service it : individualsTariff) {
+            assertEquals(it, source.testTariffs[0].get(k++));
+        }
+    }
 }
