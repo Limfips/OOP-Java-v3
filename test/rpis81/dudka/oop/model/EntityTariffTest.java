@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import rpis81.dudka.oop.model.source.DataSource;
 
-import java.util.Arrays;
-
 import static org.junit.Assert.*;
 
 public class EntityTariffTest {
@@ -24,7 +22,7 @@ public class EntityTariffTest {
     @Test
     public void add() {
         assertTrue(entity.add(source.testServices[20]));
-        assertEquals(source.entityTariffs[0].getServices()[0], entity.getFirst());
+        assertEquals(source.entityTariffs[0].toArray()[0], entity.getFirst());
         assertEquals(source.testServices[20], entity.getLast());
     }
 
@@ -48,7 +46,7 @@ public class EntityTariffTest {
 
     @Test
     public void hasService() {
-        assertTrue(entity.hasService(source.testServices[startIndex].getName()));
+        assertTrue(entity.contains(source.testServices[startIndex].getName()));
     }
 
     @Test
@@ -80,7 +78,7 @@ public class EntityTariffTest {
 
     @Test
     public void getServices1() {
-        assertEquals(1, entity.getServices(ServiceTypes.INTERNET).length);
+        assertEquals(1, entity.toArray(ServiceTypes.INTERNET).size());
     }
 
     @Test

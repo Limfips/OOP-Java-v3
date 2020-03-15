@@ -74,16 +74,16 @@ public class AccountManagerTest {
 
     @Test
     public void getAccounts1() {
-        assertEquals(10, accountManager.getAccounts(ServiceTypes.MAIL).length);
+        assertEquals(10, accountManager.getAccounts(ServiceTypes.MAIL).size());
     }
 
     @Test
     public void getIndividualAccounts() {
-        assertEquals(5, accountManager.getIndividualAccounts().length);
+        assertEquals(5, accountManager.getIndividualAccounts().size());
     }
 
     @Test
     public void getEntityAccounts() {
-        assertEquals(5, accountManager.getEntityAccounts().length);
+        assertEquals(5, accountManager.getEntityAccounts().size());
     }
 }

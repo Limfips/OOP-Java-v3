@@ -1,12 +1,9 @@
 package rpis81.dudka.oop.model;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 public class EntityTariff implements Tariff {
 
@@ -91,7 +88,7 @@ public class EntityTariff implements Tariff {
     }
 
     @Override
-    public Service[] getServices() {
+    public Service[] toArray() {
         Service[] services = new Service[this.size];
         int index = 0;
         for (Node node = this.head; node != null; node = node.next ) {
@@ -226,13 +223,13 @@ public class EntityTariff implements Tariff {
         if (!(o instanceof IndividualsTariff)) return false;
         IndividualsTariff tariff = (IndividualsTariff) o;
         return size == tariff.size() &&
-                Arrays.equals(getServices(), tariff.getServices());
+                Arrays.equals(toArray(), tariff.toArray());
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(size);
-        result = 71 * result + Arrays.hashCode(getServices());
+        result = 71 * result + Arrays.hashCode(toArray());
         return result;
     }
 

@@ -1,9 +1,7 @@
 package rpis81.dudka.oop.model;
 
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class AccountManager implements Iterable<Account> {
 
@@ -115,50 +113,39 @@ public class AccountManager implements Iterable<Account> {
         throw new NoSuchElementException();
     }
 
-    public Account[] getAccounts() {
-        Account[] newAccount = new Account[size];
-        System.arraycopy(this.accounts, 0, newAccount, 0, size);
-        return newAccount;
+    public Set<Account> getAccounts() {
+        return new HashSet<>(Arrays.asList(this.accounts).subList(0, size));
     }
 
-    public Account[] getAccounts(ServiceTypes type) {
+    public Set<Account> getAccounts(ServiceTypes type) {
         if (type == null) throw new NullPointerException();
-        Account[] accounts = new Account[size];
-        int i = 0;
+        Set<Account> accounts = new HashSet<>();
         for (Account it : this) {
-            if (it.getTariff().getServices(type).length > 0) {
-                accounts[i++] = it;
+            if (it.getTariff().toArray(type).size() > 0) {
+                accounts.add(it);
             }
         }
-        Account[] result = new Account[i];
-        System.arraycopy(accounts, 0, result, 0, i);
-        return result;
+        return accounts;
     }
 
-    public Account[] getIndividualAccounts() {
-        Account[] accounts = new Account[size];
-        int i = 0;
+    public List<Account> getIndividualAccounts() {
+        List<Account> accounts = new ArrayList<>();
         for (Account it : this) {
             if (it instanceof IndividualAccount) {
-                accounts[i++] = it;
+                accounts.add(it);
             }
         }
-        Account[] result = new Account[i];
-        System.arraycopy(accounts, 0, result, 0, i);
-        return result;
+        return accounts;
     }
 
-    public Account[] getEntityAccounts() {
-        Account[] accounts = new Account[size];
-        int i = 0;
+    public List<Account> getEntityAccounts() {
+        List<Account> accounts = new ArrayList<>();
         for (Account it : this) {
             if (it instanceof EntityAccount) {
-                accounts[i++] = it;
+                accounts.add(it);
             }
         }
-        Account[] result = new Account[i];
-        System.arraycopy(accounts, 0, result, 0, i);
-        return result;
+        return accounts;
     }
 
     public Tariff getTariff(long accountNumber) {

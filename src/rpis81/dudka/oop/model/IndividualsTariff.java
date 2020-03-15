@@ -1,13 +1,9 @@
 package rpis81.dudka.oop.model;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-
-import static java.time.temporal.ChronoUnit.DAYS;
-import static java.time.temporal.ChronoUnit.MONTHS;
 
 
 public class IndividualsTariff implements Tariff, Cloneable {
@@ -114,7 +110,7 @@ public class IndividualsTariff implements Tariff, Cloneable {
         return size;
     }
 
-    public Service[] getServices() {
+    public Service[] toArray() {
         Service[] newService = new Service[size];
         System.arraycopy(this.services, 0, newService, 0, size);
         return newService;

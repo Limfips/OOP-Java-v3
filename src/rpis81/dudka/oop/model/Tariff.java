@@ -1,13 +1,11 @@
 package rpis81.dudka.oop.model;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public interface Tariff extends Iterable<Service> {
+public interface Tariff extends Iterable<Service>, Collection<Service> {
     boolean add(Service service);
     boolean add(int index, Service service);
     Service get(int index);
@@ -22,7 +20,7 @@ public interface Tariff extends Iterable<Service> {
         }
         throw new NoSuchElementException();
     }
-    default boolean hasService(String serviceName) {
+    default boolean contains(String serviceName) {
         if (serviceName == null) throw new NullPointerException();
         try {
             get(serviceName);
@@ -35,8 +33,8 @@ public interface Tariff extends Iterable<Service> {
     Service remove(int index);
     Service remove(String serviceName);
     int size();
-    Service[] getServices();
-    default Service[] getServices(ServiceTypes type) {
+    Service[] toArray();
+    default Collection<Service> toArray(ServiceTypes type) {
         if (type == null) throw new NullPointerException();
         Service[] services = new Service[size()];
         int newSize = 0;
@@ -47,17 +45,17 @@ public interface Tariff extends Iterable<Service> {
         }
         Service[] result = new Service[newSize];
         System.arraycopy(services, 0, result, 0, newSize);
-        return result;
+        return Arrays.asList(result);
     }
-    default Service[] sortedServicesByCost() {
-        Service[] accounts = getServices();
-        Arrays.sort(accounts);
-        return accounts;
+    default List<Service> sortedServicesByCost() {
+        Service[] services = toArray();
+        Arrays.sort(services);
+        return Arrays.asList(services);
     }
     default double cost() {
         double cost = 0;
         long days;
-        for (Service service : getServices()) {
+        for (Service service : toArray()) {
             cost += service.getCost();
             days = DAYS.between(service.getActivationDate(), LocalDate.now());
             if (days < 30) {
@@ -92,5 +90,70 @@ public interface Tariff extends Iterable<Service> {
 
     default boolean isValidIndex(int index) {
         return index > -1 && index < size();
+    }
+
+    @Override
+    default boolean isEmpty() {
+        return size() == 0;
+    }
+
+    @Override
+    default boolean contains(Object o) {
+        if (o == null) throw new NullPointerException();
+        return contains(((Service) o).getName());
+    }
+
+    @Override
+    default <T> T[] toArray(T[] a) {
+        return (T[]) toArray();
+    }
+
+    @Override
+    default boolean remove(Object o) {
+        if (o == null) throw new NullPointerException();
+        if (!(o instanceof Service)) throw new ClassCastException();
+        return remove(((Service) o));
+    }
+
+    @Override
+    default boolean containsAll(Collection<?> c) {
+        if (c == null) throw new NullPointerException();
+        boolean result = true;
+        for (Object it : c) {
+            result = result && contains(it);
+        }
+        return result;
+    }
+
+    @Override
+    default boolean addAll(Collection<? extends Service> c) {
+        if (c == null) throw new NullPointerException();
+        boolean result = true;
+        for (Service it : c) {
+            result = result && add(it);
+        }
+        return result;
+    }
+
+    @Override
+    default boolean removeAll(Collection<?> c) {
+        if (c == null) throw new NullPointerException();
+        boolean result = true;
+        List<Service> services = new ArrayList<>();
+
+        for (Object it : c) {
+            result = result && add((Service) it);
+        }
+        return result;
+    }
+
+    @Override
+    default boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    default void clear() {
+
     }
 }
