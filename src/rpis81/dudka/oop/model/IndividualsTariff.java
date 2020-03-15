@@ -1,7 +1,13 @@
 package rpis81.dudka.oop.model;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+
+import static java.time.temporal.ChronoUnit.DAYS;
+import static java.time.temporal.ChronoUnit.MONTHS;
+
 
 public class IndividualsTariff implements Tariff, Cloneable {
 
@@ -35,12 +41,15 @@ public class IndividualsTariff implements Tariff, Cloneable {
     }
 
     public boolean add(Service service) {
+        if (service == null) throw new NullPointerException();
         checkQuantity();
         this.services[size++] = service;
         return true;
     }
 
     public boolean add(int index, Service service) {
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        if (service == null) throw new NullPointerException();
         if (index > -1 && index < this.services.length){
             if (size + 1 > this.services.length) {
                 increaseArray();
@@ -64,13 +73,12 @@ public class IndividualsTariff implements Tariff, Cloneable {
     }
 
     public Service get(int index) {
-        if (index > -1 && index < size){
-            return this.services[index];
-        }
-        return null;
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        return this.services[index];
     }
 
     public Service get(String serviceName) {
+        if (serviceName == null) throw new NullPointerException();
         Service service;
         for (int i = 0; i < size; i++){
             service = this.services[i];
@@ -78,37 +86,36 @@ public class IndividualsTariff implements Tariff, Cloneable {
                 return service;
             }
         }
-        return null;
+        throw new NoSuchElementException();
     }
 
     public boolean hasService(String serviceName) {
+        if (serviceName == null) throw new NullPointerException();
         Service service = get(serviceName);
         return service != null;
     }
 
     public Service set(int index, Service service) {
-        if (index > -1 && index < size){
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        if (service == null) throw new NullPointerException();
             Service oldService = this.services[index];
             this.services[index] = service;
             return oldService;
-        }
-        return null;
     }
 
     public Service remove(int index) {
-        if (index > -1 && index < size){
-            return toRemove(index);
-        }
-        return null;
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        return toRemove(index);
     }
 
     public Service remove(String serviceName) {
+        if (serviceName == null) throw new NullPointerException();
         for (int i = 0; i < size; i++) {
             if (services[i].getName().equals(serviceName)) {
                 return toRemove(i);
             }
         }
-        return null;
+        throw new NoSuchElementException();
     }
 
 
@@ -146,18 +153,25 @@ public class IndividualsTariff implements Tariff, Cloneable {
 
     public double cost() {
         double cost = 0;
+        long days;
         for (Service service : getServices()) {
             cost += service.getCost();
+            days = DAYS.between(service.getActivationDate(), LocalDate.now());
+            if (days < 30) {
+                cost += (days * cost) / 30;
+            }
         }
         return cost;
     }
 
     @Override
     public boolean remove(Service service) {
+        if (service == null) throw new NullPointerException();
         return remove(service.getName()) != null;
     }
 
     public int indexOf(String serviceName) {
+        if (serviceName == null) throw new NullPointerException();
         for (int i = 0; i < size; i++) {
             if (this.services[i].getName().equals(serviceName)) {
                 return i;
@@ -168,6 +182,7 @@ public class IndividualsTariff implements Tariff, Cloneable {
 
     @Override
     public int lastIndexOf(Service service) {
+        if (service == null) throw new NullPointerException();
         int k = -1;
         for (int i = 0; i < size; i++) {
             if (this.services[i].equals(service)) {
@@ -179,6 +194,7 @@ public class IndividualsTariff implements Tariff, Cloneable {
 
     @Override
     public Service[] getServices(ServiceTypes type) {
+        if (type == null) throw new NullPointerException();
         Service[] services = new Service[size];
         int newSize = 0;
         for (Service it : getServices()) {

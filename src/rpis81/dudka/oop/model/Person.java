@@ -8,6 +8,7 @@ public class Person {
     private String sName;
 
     public Person(String fName, String sName) {
+        if (fName == null || sName == null) throw new NullPointerException();
         this.fName = fName;
         this.sName = sName;
     }

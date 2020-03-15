@@ -17,4 +17,8 @@ public interface Tariff {
     boolean remove(Service service);
     int indexOf(String serviceName);
     int lastIndexOf(Service service);
+
+    default boolean isValidIndex(int index) {
+        return index > -1 && index < size();
+    }
 }

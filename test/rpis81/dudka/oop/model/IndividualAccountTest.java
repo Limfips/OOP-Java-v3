@@ -3,6 +3,8 @@ package rpis81.dudka.oop.model;
 import org.junit.Test;
 import rpis81.dudka.oop.model.source.DataSource;
 
+import java.time.LocalDate;
+
 import static org.junit.Assert.*;
 
 public class IndividualAccountTest {
@@ -16,14 +18,17 @@ public class IndividualAccountTest {
         assertEquals(account.getNumber(), source.testIndividualAccounts[0].getNumber());
         assertEquals(account.getPerson(), source.people[0]);
         assertEquals(account.getTariff(), IndividualAccount.INDIVIDUALS_TARIFF_DEFAULT);
+        assertEquals(account.getRegistrationDate(), LocalDate.now());
     }
 
     @Test
     public void secondConstructor() {
-        account = new IndividualAccount(source.testIndividualAccounts[0].getNumber(), source.people[0], source.testTariffs[0]);
+        account = new IndividualAccount(source.testIndividualAccounts[0].getNumber(),
+                source.people[0], source.testTariffs[0], LocalDate.now());
         assertEquals(account.getNumber(), source.testIndividualAccounts[0].getNumber());
         assertEquals(account.getPerson(), source.people[0]);
         assertEquals(account.getTariff(), source.testTariffs[0]);
+        assertEquals(account.getRegistrationDate(), LocalDate.now());
     }
 
     @Test

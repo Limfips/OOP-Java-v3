@@ -1,5 +1,6 @@
 package rpis81.dudka.oop.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class EntityAccount extends AbstractAccount {
@@ -14,12 +15,12 @@ public class EntityAccount extends AbstractAccount {
     private String name;
 
     public EntityAccount(long number, String name) {
-        this(number, name, ENTITY_TARIFF_DEFAULT);
+        this(number, name, ENTITY_TARIFF_DEFAULT, LocalDate.now());
     }
 
-    public EntityAccount(long number, String name, Tariff tariff) {
-        super(number, tariff);
-        this.name = name;
+    public EntityAccount(long number, String name, Tariff tariff, LocalDate registrationDate) {
+        super(number, tariff, registrationDate);
+        setName(name);
     }
 
     public String getName() {
@@ -27,6 +28,7 @@ public class EntityAccount extends AbstractAccount {
     }
 
     public void setName(String name) {
+        if (name == null) throw new NullPointerException();
         this.name = name;
     }
 

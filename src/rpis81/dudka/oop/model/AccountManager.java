@@ -2,6 +2,7 @@ package rpis81.dudka.oop.model;
 
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 public class AccountManager {
 
@@ -27,64 +28,90 @@ public class AccountManager {
         size = i;
     }
 
-    public boolean add(Account account) {
-        checkQuantity();
-        this.accounts[size++] = account;
-        return true;
+    private boolean isValidIndex(int index) {
+        return index > -1 && index < size();
     }
 
-    public boolean add(int index, Account account) {
-        if (index > -1 && index < this.accounts.length){
-            if (size + 1 > this.accounts.length) {
-                increaseArray();
-            }
-            if (index < size) {
-                int length = (size - index);
-                for (int i = 0, j = size; i < length; i++) {
-                    Account tmp = this.accounts[j];
-                    this.accounts[j] = this.accounts[j-1];
-                    this.accounts[j-1] = tmp;
-                    j--;
-                }
-                this.accounts[index] = account;
-                size += 1;
-            } else {
-                add(account);
-            }
+    public boolean add(Account account) {
+        if (account == null) throw new NullPointerException();
+        try {
+            getAccount(account.getNumber());
+        } catch (NoSuchElementException exception) {
+            checkQuantity();
+            this.accounts[size++] = account;
             return true;
         }
         return false;
     }
 
-    public Account get(int index) {
-        if (index > -1 && index < size){
-            return this.accounts[index];
+    public boolean add(int index, Account account) {
+        if (account == null) throw new NullPointerException();
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        try {
+            getAccount(account.getNumber());
+        } catch (NoSuchElementException exception) {
+            if (index > -1 && index < this.accounts.length){
+                if (size + 1 > this.accounts.length) {
+                    increaseArray();
+                }
+                if (index < size) {
+                    int length = (size - index);
+                    for (int i = 0, j = size; i < length; i++) {
+                        Account tmp = this.accounts[j];
+                        this.accounts[j] = this.accounts[j-1];
+                        this.accounts[j-1] = tmp;
+                        j--;
+                    }
+                    this.accounts[index] = account;
+                    size += 1;
+                } else {
+                    add(account);
+                }
+                return true;
+            }
         }
-        return null;
+        return false;
+    }
+
+    public Account get(int index) {
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        return this.accounts[index];
     }
 
     public Account set(int index, Account account) {
-        if (index > -1 && index < size){
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        if (account == null) throw new NullPointerException();
+        try {
+            getAccount(account.getNumber());
+        } catch (NoSuchElementException exception) {
             Account oldAccount = this.accounts[index];
             this.accounts[index] = account;
             return oldAccount;
         }
-        return null;
+        throw new NoSuchElementException();
     }
 
     public Account remove(int index) {
-        if (index > -1 && index < size){
-            Account oldAccount = this.accounts[index];
-            this.accounts[index] = null;
-            size--;
-            shiftValues(index);
-            return oldAccount;
-        }
-        return null;
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        Account oldAccount = this.accounts[index];
+        this.accounts[index] = null;
+        size--;
+        shiftValues(index);
+        return oldAccount;
     }
 
     public int size() {
         return size;
+    }
+
+    public Account getAccount(long accountNumber) {
+        if (!AbstractAccount.isValidNumber(accountNumber)) throw new IllegalAccountNumber();
+        for (Account it : getAccounts()) {
+            if (it.getNumber() == accountNumber) {
+                return it;
+            }
+        }
+        throw new NoSuchElementException();
     }
 
     public Account[] getAccounts() {
@@ -94,6 +121,7 @@ public class AccountManager {
     }
 
     public Account[] getAccounts(ServiceTypes type) {
+        if (type == null) throw new NullPointerException();
         Account[] accounts = new Account[size];
         int i = 0;
         for (Account it : getAccounts()) {
@@ -133,6 +161,7 @@ public class AccountManager {
     }
 
     public Tariff getTariff(long accountNumber) {
+        if (!AbstractAccount.isValidNumber(accountNumber)) throw new IllegalAccountNumber();
         for (int i = 0; i < size; i++) {
 
             if (this.accounts[i].getNumber() == accountNumber) {
@@ -143,6 +172,8 @@ public class AccountManager {
     }
 
     public Tariff setTariff(long accountNumber, Tariff tariff) {
+        if (!AbstractAccount.isValidNumber(accountNumber)) throw new IllegalAccountNumber();
+        if (tariff == null) throw new NullPointerException();
         for (int i = 0; i < size; i++) {
             if (this.accounts[i].getNumber() == accountNumber) {
                 Tariff oldTariff = this.accounts[i].getTariff();

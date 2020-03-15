@@ -1,7 +1,11 @@
 package rpis81.dudka.oop.model;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class EntityTariff implements Tariff {
 
@@ -40,55 +44,60 @@ public class EntityTariff implements Tariff {
 
     @Override
     public boolean add(Service service) {
+        if (service == null) throw new NullPointerException();
         return addLast(service);
     }
 
     @Override
     public boolean add(int index, Service service) {
+        if (service == null) throw new NullPointerException();
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
         return addNodeByIndex(index, new Node(service, null, null));
     }
 
     @Override
     public Service get(int index) {
-        if (checkIndex(index)) {
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
             Node node = getNodeByIndex(index);
             if (node != null) {
                 return node.value;
             }
-        }
-        return null;
+            throw new NoSuchElementException();
     }
 
     @Override
     public Service get(String serviceName) {
+        if (serviceName == null) throw new NullPointerException();
         for (Node node = this.head; node != null; node = node.next) {
             if (node.value.getName().equals(serviceName)) {
                 return node.value;
             }
         }
-        return null;
+        throw new NoSuchElementException();
     }
 
     @Override
     public boolean hasService(String serviceName) {
+        if (serviceName == null) throw new NullPointerException();
         return get(serviceName) != null;
     }
 
     @Override
     public Service set(int index, Service service) {
-        if (checkIndex(index) && service != null) {
-            return setNodeByIndex(index, service);
-        }
-        return null;
+        if (service == null) throw new NullPointerException();
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
+        return setNodeByIndex(index, service);
     }
 
     @Override
     public Service remove(int index) {
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
         return removeNodeByIndex(index);
     }
 
     @Override
     public Service remove(String serviceName) {
+        if (serviceName == null) throw new NullPointerException();
         return removeNodeByIndex(indexOf(serviceName));
     }
 
@@ -125,19 +134,26 @@ public class EntityTariff implements Tariff {
     @Override
     public double cost() {
         double cost = 0;
+        long days;
         for (Service service : getServices()) {
             cost += service.getCost();
+            days = DAYS.between(service.getActivationDate(), LocalDate.now());
+            if (days < 30) {
+                cost += (days * cost) / 30;
+            }
         }
         return cost;
     }
 
     @Override
     public boolean remove(Service service) {
+        if (service == null) throw new NullPointerException();
         return remove(service.getName()) != null;
     }
 
     @Override
     public int indexOf(String serviceName) {
+        if (serviceName == null) throw new NullPointerException();
         Service[] services = getServices();
         for (int i = 0; i < size; i++) {
             if (services[i] != null) {
@@ -151,6 +167,7 @@ public class EntityTariff implements Tariff {
 
     @Override
     public int lastIndexOf(Service service) {
+        if (service == null) throw new NullPointerException();
         Service[] services = getServices();
         int k = -1;
         for (int i = 0; i < size; i++) {
@@ -163,6 +180,7 @@ public class EntityTariff implements Tariff {
 
     @Override
     public Service[] getServices(ServiceTypes type) {
+        if (type == null) throw new NullPointerException();
         Service[] services = new Service[size];
         int newSize = 0;
         for (Service it : getServices()) {
@@ -198,15 +216,6 @@ public class EntityTariff implements Tariff {
 
     // По Заданию
     private Node getNodeByIndex(int index) {
-//        Node resultNode = null;
-//        int count = 0;
-//        for (Node node = this.head.next; node != this.head; node = node.next) {
-//            if (count++ == index) {
-//                resultNode = node;
-//                break;
-//            }
-//        }
-//        return resultNode;
         int count = 0;
         for (Node node = this.head; node != null; node = node.next ) {
             if (index == count++) {
@@ -218,7 +227,7 @@ public class EntityTariff implements Tariff {
 
     // По Заданию
     private boolean addNodeByIndex(int index, Node addNode) {
-        if (checkIndex(index)) {
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
             if (index == 0) {
                 addNode.prev = null;
                 addNode.next = this.head;
@@ -236,13 +245,11 @@ public class EntityTariff implements Tariff {
             getNodeByIndex(index).prev = addNode;
             getNodeByIndex(index - 1).next = addNode;
             return true;
-        }
-        return false;
     }
 
     // По Заданию
     private Service removeNodeByIndex(int index) {
-        if (checkIndex(index)) {
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
             Node removeNode = getNodeByIndex(index);
             if (removeNode != null) {
                 if (removeNode.value.equals(getFirst())) {
@@ -262,12 +269,12 @@ public class EntityTariff implements Tariff {
                 size -= 1;
                 return  removeNode.value;
             }
-        }
         return null;
     }
 
     // По Заданию
     private Service setNodeByIndex(int index, Service service) {
+        if (!isValidIndex(index)) throw new IndexOutOfBoundsException();
         Service oldValue = null;
         Node node = getNodeByIndex(index);
         if (node != null) {
@@ -279,10 +286,6 @@ public class EntityTariff implements Tariff {
 
     public boolean isEmpty() {
         return this.size == 0;
-    }
-
-    private boolean checkIndex(int index) {
-        return (index > -1 && index < this.size);
     }
 
     public Service getFirst() {
