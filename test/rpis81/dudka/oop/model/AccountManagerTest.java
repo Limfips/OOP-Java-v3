@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import rpis81.dudka.oop.model.source.DataSource;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class AccountManagerTest {
@@ -68,5 +70,20 @@ public class AccountManagerTest {
         Tariff constTariff = source.testIndividualAccounts[1].getTariff();
         assertEquals(accountManager.setTariff(source.testIndividualAccounts[1].getNumber(), source.testIndividualAccounts[9].getTariff()),
                 constTariff);
+    }
+
+    @Test
+    public void getAccounts1() {
+        assertEquals(10, accountManager.getAccounts(ServiceTypes.MAIL).length);
+    }
+
+    @Test
+    public void getIndividualAccounts() {
+        assertEquals(5, accountManager.getIndividualAccounts().length);
+    }
+
+    @Test
+    public void getEntityAccounts() {
+        assertEquals(5, accountManager.getEntityAccounts().length);
     }
 }

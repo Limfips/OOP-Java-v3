@@ -91,6 +91,45 @@ public class AccountManager {
         return newAccount;
     }
 
+    public Account[] getAccounts(ServiceTypes type) {
+        Account[] accounts = new Account[size];
+        int i = 0;
+        for (Account it : getAccounts()) {
+            if (it.getTariff().getServices(type).length > 0) {
+                accounts[i++] = it;
+            }
+        }
+        Account[] result = new Account[i];
+        System.arraycopy(accounts, 0, result, 0, i);
+        return result;
+    }
+
+    public Account[] getIndividualAccounts() {
+        Account[] accounts = new Account[size];
+        int i = 0;
+        for (Account it : getAccounts()) {
+            if (it instanceof IndividualAccount) {
+                accounts[i++] = it;
+            }
+        }
+        Account[] result = new Account[i];
+        System.arraycopy(accounts, 0, result, 0, i);
+        return result;
+    }
+
+    public Account[] getEntityAccounts() {
+        Account[] accounts = new Account[size];
+        int i = 0;
+        for (Account it : getAccounts()) {
+            if (it instanceof EntityAccount) {
+                accounts[i++] = it;
+            }
+        }
+        Account[] result = new Account[i];
+        System.arraycopy(accounts, 0, result, 0, i);
+        return result;
+    }
+
     public Tariff getTariff(long accountNumber) {
         for (int i = 0; i < size; i++) {
 

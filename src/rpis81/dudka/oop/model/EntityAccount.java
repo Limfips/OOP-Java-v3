@@ -1,6 +1,6 @@
 package rpis81.dudka.oop.model;
 
-public class EntityAccount implements Account {
+public class EntityAccount extends AbstractAccount {
 
     public static final Tariff ENTITY_TARIFF_DEFAULT  = initTariff();
 
@@ -9,34 +9,15 @@ public class EntityAccount implements Account {
         tariff.add(new Service());
         return tariff;
     }
-
-    private long number;
     private String name;
-    private Tariff tariff;
 
     public EntityAccount(long number, String name) {
         this(number, name, ENTITY_TARIFF_DEFAULT);
     }
 
     public EntityAccount(long number, String name, Tariff tariff) {
-        this.number = number;
+        super(number, tariff);
         this.name = name;
-        this.tariff = tariff;
-    }
-
-    @Override
-    public long getNumber() {
-        return this.number;
-    }
-
-    @Override
-    public Tariff getTariff() {
-        return this.tariff;
-    }
-
-    @Override
-    public void setTariff(Tariff tariff) {
-        this.tariff = tariff;
     }
 
     public String getName() {

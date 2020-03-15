@@ -35,10 +35,39 @@ public class DataSource {
 
     private Service[] getTestServices() {
         Service[] testServices = new Service[testSizeServices];
-        for (int i = 0; i < testSizeServices; i++) {
-            testServices[i] = new Service(
-                    "интернет " + (i + 1) + "мб\\сек",
-                    (i * 10));
+        for (int i = 0, k = 0; i < testSizeServices; i++) {
+            switch (k) {
+                case 0:
+                    testServices[i] = new Service(
+                            "интернет " + (i + 1) + "мб\\сек",
+                            (i * 10), ServiceTypes.INTERNET);
+                    k += 1;
+                    break;
+                case 1:
+                    testServices[i] = new Service(
+                            "интернет " + (i + 1) + "мб\\сек",
+                            (i * 10), ServiceTypes.PHONE);
+                    k += 1;
+                    break;
+                case 2:
+                    testServices[i] = new Service(
+                            "интернет " + (i + 1) + "мб\\сек",
+                            (i * 10), ServiceTypes.STORAGE);
+                    k += 1;
+                    break;
+                case 3:
+                    testServices[i] = new Service(
+                            "интернет " + (i + 1) + "мб\\сек",
+                            (i * 10), ServiceTypes.MAIL);
+                    k += 1;
+                    break;
+                case 4:
+                    testServices[i] = new Service(
+                            "интернет " + (i + 1) + "мб\\сек",
+                            (i * 10), ServiceTypes.ADDITIONAL_SERVICE);
+                    k = 0;
+                    break;
+            }
         }
         return testServices;
     }

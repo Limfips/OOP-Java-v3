@@ -1,38 +1,35 @@
 package rpis81.dudka.oop.model;
 
-import java.util.Objects;
-
-public class Service {
+public final class Service {
 
     public static final int COST_DEFAULT = 300;
     public static final String NAME_DEFAULT = "интернет 100мб\\сек";
+    public static final ServiceTypes SERVICE_TYPES_DEFAULT = ServiceTypes.INTERNET;
     
-    private String name;
-    private double cost;
+    private final String name;
+    private final double cost;
+    private final ServiceTypes serviceType;
 
     public Service() {
-        this(NAME_DEFAULT, COST_DEFAULT);
+        this(NAME_DEFAULT, COST_DEFAULT, SERVICE_TYPES_DEFAULT);
     }
 
-    public Service(String name, double cost) {
+    public Service(String name, double cost, ServiceTypes serviceType) {
         this.name = name;
         this.cost = cost;
+        this.serviceType = serviceType;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public double getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
-        this.cost = cost;
+    public ServiceTypes getServiceType() {
+        return serviceType;
     }
 
     public boolean equals(Object object) {
@@ -41,11 +38,12 @@ public class Service {
         return this.name.equals(service.name) && this.cost == service.cost;
     }
 
-
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Service{");
         sb.append("name='").append(name).append('\'');
         sb.append(", cost=").append(cost);
+        sb.append(", serviceType=").append(serviceType);
         sb.append('}');
         return sb.toString();
     }

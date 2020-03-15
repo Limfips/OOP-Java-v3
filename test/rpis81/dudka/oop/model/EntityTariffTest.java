@@ -77,4 +77,9 @@ public class EntityTariffTest {
     public void size() {
         assertEquals(source.entityTariffs[1].size(), entity.size());
     }
+
+    @Test
+    public void getServices1() {
+        assertEquals(1, entity.getServices(ServiceTypes.INTERNET).length);
+    }
 }

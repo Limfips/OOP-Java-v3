@@ -160,6 +160,20 @@ public class IndividualsTariff implements Tariff {
         return -1;
     }
 
+    @Override
+    public Service[] getServices(ServiceTypes type) {
+        Service[] services = new Service[size];
+        int newSize = 0;
+        for (Service it : getServices()) {
+            if (it.getServiceType().equals(type)) {
+                services[newSize++] = it;
+            }
+        }
+        Service[] result = new Service[newSize];
+        System.arraycopy(services, 0, result, 0, newSize);
+        return result;
+    }
+
     //Проверка, что если места нет)))
     private void checkQuantity(){
         if (size == this.services.length) {

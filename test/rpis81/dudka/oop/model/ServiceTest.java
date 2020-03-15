@@ -15,26 +15,14 @@ public class ServiceTest {
         service = new Service();
         assertEquals(service.getName(), Service.NAME_DEFAULT);
         assertEquals(service.getCost(), Service.COST_DEFAULT, 0.0);
+        assertEquals(service.getServiceType(), Service.SERVICE_TYPES_DEFAULT);
     }
 
     @Test
     public void secondConstructor() {
-        service = new Service(source.fServiceName, source.fServiceCost);
+        service = new Service(source.fServiceName, source.fServiceCost, ServiceTypes.ADDITIONAL_SERVICE);
         assertEquals(service.getName(), source.fServiceName);
         assertEquals(service.getCost(), source.fServiceCost, 0.0);
-    }
-
-    @Test
-    public void setName() {
-        service = new Service();
-        service.setName(source.sServiceName);
-        assertEquals(service.getName(), source.sServiceName);
-    }
-
-    @Test
-    public void setCost() {
-        service = new Service();
-        service.setCost(source.sServiceCost);
-        assertEquals(service.getCost(), source.sServiceCost, 0.0);
+        assertEquals(service.getServiceType(), ServiceTypes.ADDITIONAL_SERVICE);
     }
 }

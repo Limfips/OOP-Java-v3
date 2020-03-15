@@ -14,4 +14,5 @@ public interface Tariff {
     Service[] sortedServicesByBalance();
     double cost();
     int getIndex(String serviceName);
+    Service[] getServices(ServiceTypes type);
 }

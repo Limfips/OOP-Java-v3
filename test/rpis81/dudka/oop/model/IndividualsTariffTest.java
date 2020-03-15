@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import rpis81.dudka.oop.model.source.DataSource;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class IndividualsTariffTest {
@@ -71,5 +73,10 @@ public class IndividualsTariffTest {
             cost += it.getCost();
         }
         assertEquals(cost, individualsTariff.cost(), 0.0);
+    }
+
+    @Test
+    public void getServices1() {
+        assertEquals(1, individualsTariff.getServices(ServiceTypes.INTERNET).length);
     }
 }
